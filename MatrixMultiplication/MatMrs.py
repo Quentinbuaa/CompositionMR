@@ -226,15 +226,44 @@ class MRComposition(MR):
         return (ftc_expected_output, self.ftc_A, self.ftc_B, program_to_test)
 
     def getMessage(self):
-        message = ""
-        for mr in self.mrs:
-            message = message+".{}".format(mr.getMessage())
+        message = self.mrs[0].getMessage()
+        for index in range(len(self.mrs)-1):
+            message = message+".{}".format(self.mrs[index+1].getMessage())
         return message
+
+def MRFactor(mr_name):
+    if mr_name == "MR1":
+        return MR1()
+    elif mr_name == "MR2":
+        return MR2()
+    elif mr_name == "MR3":
+        return MR3()
+    elif mr_name == "MR4":
+        return MR4()
+    elif mr_name == "MR5":
+        return MR5()
+    elif mr_name == "MR6":
+        return MR6()
+    elif mr_name == "MR7":
+        return MR7()
+    elif mr_name == "MR8":
+        return MR8()
+    elif mr_name == "MR9":
+        return MR9()
+    else:
+        print("Not such MR of {}".format(mr_name))
+        sys.exit(-1)
+
 
 if __name__ == "__main__":
     otc_A = [[1, 7, 0, 0], [0, 2, 8, 0], [5, 0, 3, 9], [0, 6, 0, 4]]
     otc_B = [[0, 7, 0, 0], [0, 2, 8, 0], [5, 0, 3, 9], [0, 6, 0, 4]]
+    otc_A = [[1, 0, 1, 0, 0, 8, 0, 0], [0, 0, 0, 0, 0, 4, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [0, 0, -1, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 2], [0, 0, 0, 0, 0, 0, 3, 0], [0, 0, 1, 0, 0, 0, 10, 0], [0, -20, 0, 0, 0, 0, 0, 0]]
+    otc_B = [[-1, 0, 1, 0, 0, 8, 0, 0], [0, 0, 0, 0, 0, 4, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [0, 0, -1, 0, 0, 0, 0, 0],
+              [100, 1, 0, 0, 0, 0, 0, 2], [0, 0, 0, 0, 0, 0, 3, 0], [0, 0, 1, 0, 0, 0, 10, 0], [0, -20, 0, 0, 0, 0, 0, 0]]
     mr = MRComposition([MR8(), MR2(), MR1(), MR4(), MR5(), MR3(), MR6(), MR7(),MR9()])
+    #mr =MRComposition([MR9()])
     otc_output = spm.MatMul(otc_A,otc_B)
     (ftc_expected_output, ftc_A, ftc_B, spm.MatMul) = mr.getExpectedFTCOutput(otc_output, otc_A, otc_B, spm.MatMul)
     ftc_output = spm.MatMul(ftc_A, ftc_B)

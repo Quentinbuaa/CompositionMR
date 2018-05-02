@@ -14,6 +14,7 @@ def trim(c, jc):
 def Normalization(n,m,c,ic,jc):
     result_c = []
     nz = 0
+    print(n, m, c, ic,jc)
     for i in range(n):
         temp = []
         for j in range(m):
@@ -118,7 +119,7 @@ def MU_2_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
                 icol = mask[icol_add]
                 if (icol == -1):
                     jc[nz] =  icol_add
-                    c[nz] = b[k]
+                    c[nz] = b[k]                      # c[nz]=a[ij]*b[k]
                     mask[icol_add] = nz
                     nz = nz + 1
                 else:
@@ -153,7 +154,7 @@ def MU_3_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
                 icol = mask[icol_add]
                 if (icol == -1):
                     jc[nz] =  icol_add
-                    c[nz] = aij
+                    c[nz] = aij                            #c[nz]=aij*b[k]
                     mask[icol_add] = nz
                     nz = nz + 1
                 else:
@@ -192,7 +193,7 @@ def MU_4_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
                     mask[icol_add] = nz
                     nz = nz + 1
                 else:
-                    c[icol]=c[icol]+aij
+                    c[icol]=c[icol]+aij                      #c[icol]+=aij*b[k]
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
@@ -227,7 +228,7 @@ def MU_5_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
                     mask[icol_add] = nz
                     nz = nz + 1
                 else:
-                    c[icol]=c[icol]+b[k]
+                    c[icol]=c[icol]+b[k]                #c[icol]+=aij*b[k]
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
@@ -296,7 +297,7 @@ def MU_7_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
                     c[nz] = aij * b[k]
                     mask[icol_add] = nz
                     nz = nz + 1
-            else:
+                else:
                     c[icol]=c[icol]+aij *b[k]
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
