@@ -154,7 +154,7 @@ class MR4(MR):
 class MR5(MR):
 
     def getExpectedFTCOutput(self, otc_output,otc_A,otc_B, program_to_test):
-        Q = self.getQMatrix(len(otc_A), 4)
+        Q = self.getQMatrix(len(otc_B[0]), 4)
         self.ftc_B = program_to_test(otc_B, Q)
         self.ftc_A = self.mat_copy(otc_A)
         ftc_expected_output = program_to_test(otc_output, Q)

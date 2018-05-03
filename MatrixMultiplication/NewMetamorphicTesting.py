@@ -103,11 +103,13 @@ def Test3():
 
 def Test4(): # "MU_7_SparseMatMul" could lead to program crash. This fault can lead to program crash, so it can be easily identified.
     my_ts = ts.TestCases()
-    my_ts.setUP(20,500)
-    my_ts.setSize(1000)
+    my_ts.setUP(20,50)
+    my_ts.setSize(10)
     mrs = getSMRList([ "MR1","MR2","MR3", "MR4", "MR5", "MR6","MR7", "MR8", "MR9"])
+    mrs = getSMRList([ "MR1","MR2","MR3", "MR4", "MR5", "MR6","MR7"])
     mutants = [ "MU_7_SparseMatMul" ]             # this faults can lead to the crash of the program. The crash could be caused by my mistake.
     test_cases = my_ts.getRandomTestCases()
+    test_cases = my_ts.getTestCases()
     TestAllCMRs(2, mrs, test_cases, mutants)
 
 def Test5():

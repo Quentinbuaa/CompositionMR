@@ -265,7 +265,7 @@ def MU_6_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
     C = Normalization(n, m, c, ic, jc)
     return C
 
-def MU_7_SparseMatMul(n, m, a, ia, ja, b, ib, jb):   # this mutant could lead to program crash. So, we will not use it.
+def MU_7_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
     nz = 0
     mask = []
     for i in range(m):
@@ -282,7 +282,7 @@ def MU_7_SparseMatMul(n, m, a, ia, ja, b, ib, jb):   # this mutant could lead to
     for i in range(0,n):
         for j in range(ia[i], ia[i+1]):
             neighbour = ja[j]
-            aij = a[i]                     # this line is modified from a[j]
+            aij = a[j]
             for k in range(ib[neighbour], ib[neighbour+1]):
                 icol_add = jb[k]
                 icol = mask[icol_add]
@@ -290,7 +290,7 @@ def MU_7_SparseMatMul(n, m, a, ia, ja, b, ib, jb):   # this mutant could lead to
                     jc[nz] = icol_add
                     c[nz] = aij * b[k]
                     mask[icol_add] = nz
-                    nz = nz + 1
+                    #nz = nz + 1                      #  Delete this line nz = nz+1
                 else:
                     c[icol]=c[icol]+aij *b[k]
         for k in range(ic[i], nz):
@@ -417,10 +417,11 @@ class MatrixMultiple():
 
 
 if __name__ =="__main__":
-    A = [[1, 7, 0, 0],[0, 2, 8, 0],[5, 0, 3, 9],[0, 6, 0, 4]]
+    A = [[1, 7, 0 ],[0, 2, 8],[5, 0, 3],[0, 6, 0]]
+    B = [[1, 7, 0, 0],[0, 2, 8, 0],[5, 0, 3, 9]]
     #(a, ia, ja) = CreateSparseMat(A)
     #print(a, ia, ja)
     #c, ic, jc = SparseMatMul(4, 4, a,ia,ja, a, ia, ja)
     #normal_c = Normalization(4,4, c,ic,jc)
     #print(normal_c)
-    print(MatMul(A, A))
+    print(MatMul(A, B))
