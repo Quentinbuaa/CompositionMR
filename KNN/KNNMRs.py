@@ -306,7 +306,8 @@ class MRComposition(MR):
         ftc_expected_output = predictions
         ftc_training_set = training_set
         ftc_testing_set = testing_set
-        for mr in self.mrs:
+        reversed_mrs = reversed(self.mrs)   # the composition should be reversed when composing.
+        for mr in reversed_mrs:
             (ftc_expected_output, ftc_training_set, ftc_testing_set) = mr.getExpectedFTCOutput(ftc_expected_output,ftc_training_set,ftc_testing_set)
         return (ftc_expected_output,ftc_training_set,ftc_testing_set)
 

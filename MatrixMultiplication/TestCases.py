@@ -1,7 +1,19 @@
+import random
+
 
 class TestCases():
     def __init__(self):
-        pass
+        self.dim_upper = 500
+        self.dim_lower = 10
+        self.split = 0.1
+        self.num_of_pair_of_matrices =100
+
+    def setUP(self,dim_lower,dim_upper):
+        self.dim_upper = dim_upper
+        self.dim_lower = dim_lower
+
+    def setSize(self,size):
+        self.num_of_pair_of_matrices = size
 
     def getSpecialTestCases(self):
         otc_A = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
@@ -32,4 +44,25 @@ class TestCases():
         otc_B3 = [[0, 0, 1, 0, 0, 8, 0, 0],[0, 0, 0, 0, 0, 4, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0],[0, 0, -1, 0, 0, 0, 0, 0],
                   [0, 0, 0, 0, 0, 0, 0, 2], [0, 0, 0, 0, 0, 0, 3, 0], [0, 0, 1, 0, 0, 0, 100, 0], [0, -20, 0, 0, 0, 0, 0, 0]]
         result = [(otc_A, otc_B), (otc_A1, otc_B1),(otc_A2,otc_B2),(otc_A3,otc_B3) ]
+        return result
+
+    def getRandomTestCases(self):
+        result = []
+        for i in range(self.num_of_pair_of_matrices):
+            dim = random.randint(self.dim_lower,self.dim_upper)
+            otc_A = []
+            otc_B = []
+            for row in range(dim):
+                temp_A = []
+                temp_B = []
+                for col in range(dim):
+                    if random.random() < self.split:
+                        temp_A.append(random.randint(-200, 200))
+                        temp_B.append(random.randint(-200,200))
+                    else:
+                        temp_A.append(0)
+                        temp_B.append(0)
+                otc_A.append(temp_A)
+                otc_B.append(temp_B)
+            result.append((otc_A,otc_B))
         return result

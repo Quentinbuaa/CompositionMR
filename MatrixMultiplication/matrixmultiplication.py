@@ -1,20 +1,14 @@
 import sys
 
-def trim(c, jc):
-    index = 0
-    for i in c:
-        if i == 0:
-            break
-        else:
-            index = index + 1
-    c = c[0: index]
-    jc = jc[0: index]
+# the trim should based on the ic, which is the total time of multiplication operated.
+def trim(c, ic, jc):
+    c = c[0:ic[-1]]
+    jc = jc[0:ic[-1]]
     return c, jc
 
 def Normalization(n,m,c,ic,jc):
     result_c = []
     nz = 0
-    print(n, m, c, ic,jc)
     for i in range(n):
         temp = []
         for j in range(m):
@@ -57,7 +51,7 @@ def SparseMatMul(n, m, a, ia, ja, b, ib, jb):
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 
@@ -78,7 +72,7 @@ def MU_1_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
     for i in range(0,n):
         for j in range(ia[i], ia[i+1]):
             neighbour = ja[j]
-            aij = a[j]
+            aij = a[0]                                       # aij = a[j]
             for k in range(ib[neighbour], ib[neighbour+1]):
                 icol_add = jb[k]
                 icol = mask[icol_add]
@@ -86,13 +80,13 @@ def MU_1_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
                     jc[nz] =  icol_add
                     c[nz] = aij * b[k]
                     mask[icol_add] = nz
-                    #nz = nz
+                    nz = nz+1
                 else:
                     c[icol]=c[icol]+aij*b[k]
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 
@@ -127,7 +121,7 @@ def MU_2_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 
@@ -162,7 +156,7 @@ def MU_3_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 
@@ -197,7 +191,7 @@ def MU_4_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 
@@ -232,7 +226,7 @@ def MU_5_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 
@@ -267,11 +261,11 @@ def MU_6_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 
-def MU_7_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
+def MU_7_SparseMatMul(n, m, a, ia, ja, b, ib, jb):   # this mutant could lead to program crash. So, we will not use it.
     nz = 0
     mask = []
     for i in range(m):
@@ -302,7 +296,7 @@ def MU_7_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
         for k in range(ic[i], nz):
             mask[jc[k]] = -1
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 
@@ -337,7 +331,7 @@ def MU_8_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
         for k in range(ic[i], nz):
             mask[jc[i]] = -1                 # this line is modified from jc[k]
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 
@@ -386,7 +380,7 @@ def MU_9_SparseMatMul(n, m, a, ia, ja, b, ib, jb):
         for k in range(ic[i], n-1):
             mask[jc[k]] = -1
         ic[i+1] = nz
-    c, jc = trim(c, jc)
+    c, jc = trim(c, ic, jc)
     C = Normalization(n, m, c, ic, jc)
     return C
 

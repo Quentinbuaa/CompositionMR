@@ -111,27 +111,18 @@ class MetamorphicTest():
 
 class MTCompare(MetamorphicTest):
     def __init__(self):
-        super(MTCompare, self).__init__("TEST", 1, 1000)
+        super(MTCompare, self).__init__("TEST", 1, 8000)
 
     def verifyCase3(self):
-        mr_2 = MR1(-30.2, 50.3)
+        mr_1 = MR1(-30.2, 10.3)
         #mr_2 = MR1(3.3, 9.4)
-        mr_1 = MR4()
+        mr_2 = MR5()
         ts_1 = self.TestOneMR(mr_1)
         ts_2 = self.TestOneMR(mr_2)
         ts_12 = self.TestOneMR(MRComposition([mr_1, mr_2]))
-        #re = list(zip(ts_1,ts_2,ts_12))
-        #for (a, b, c) in re:
         print(list(set(ts_1)))
         print(list(set(ts_2)))
         print(list(set(ts_12)))
-
-            #if a==1 or b ==1 or c ==1 :
-            #    print("{} {} {}".format(a,b ,c))
-            # elif b==1:
-            #     print("{} {} {}".format(a,b ,c))
-            # else:
-            #     print("{} {} {}".format(a,b ,c))
 
 
     def TestOneMR_with_different_test_set(self, mr):
@@ -158,7 +149,7 @@ class MTCompare(MetamorphicTest):
 
 
 def Test_1():
-    mt = MetamorphicTest("TEST", 3, 8000)
+    mt = MetamorphicTest("TEST", 3, 100)
     for i in range(1):
         print(">>>>>{}>>>>>>".format(i))
         mt.loadMRList()

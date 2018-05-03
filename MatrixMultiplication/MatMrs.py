@@ -192,9 +192,9 @@ class MR8(MR):
         I = self.getIdentityMatrix(dim)
         self.ftc_A = self.mat_addition(otc_A, I)
         self.ftc_B = self.mat_copy(otc_B)
-        ftc_expected_output = self.mat_addition(otc_output, otc_B)
-        return (ftc_expected_output, self.ftc_A, self.ftc_B, program_to_test)
-
+        I_time_B = program_to_test(I, otc_B)
+        ftc_expected_output = self.mat_addition(otc_output, I_time_B)
+        return (ftc_expected_output, self.ftc_A, self.ftc_B, program_to_test) #this line is changed, because (A+I)B= AB+BI should also be used.
 
     def getMessage(self):
         return "MR8"
@@ -205,7 +205,9 @@ class MR9(MR):
         I = self.getIdentityMatrix(dim)
         self.ftc_A = self.mat_copy(otc_A)
         self.ftc_B = self.mat_addition(otc_B, I)
-        ftc_expected_output = self.mat_addition(otc_A, otc_output)
+        A_time_I = program_to_test(otc_A, I)
+        ftc_expected_output = self.mat_addition(A_time_I, otc_output)            #this line is changed, because A(B+I)= AI+AB should also be used.
+
         return (ftc_expected_output, self.ftc_A, self.ftc_B, program_to_test)
 
     def getMessage(self):
@@ -221,7 +223,8 @@ class MRComposition(MR):
         ftc_expected_output = otc_output
         self.ftc_A = otc_A
         self.ftc_B = otc_B
-        for mr in self.mrs:
+        reversed_mrs = reversed(self.mrs)
+        for mr in reversed_mrs:
             (ftc_expected_output, self.ftc_A, self.ftc_B, program_to_test) = mr.getExpectedFTCOutput(ftc_expected_output, self.ftc_A, self.ftc_B, program_to_test)
         return (ftc_expected_output, self.ftc_A, self.ftc_B, program_to_test)
 
@@ -258,10 +261,10 @@ def MRFactor(mr_name):
 if __name__ == "__main__":
     otc_A = [[1, 7, 0, 0], [0, 2, 8, 0], [5, 0, 3, 9], [0, 6, 0, 4]]
     otc_B = [[0, 7, 0, 0], [0, 2, 8, 0], [5, 0, 3, 9], [0, 6, 0, 4]]
-    otc_A = [[1, 0, 1, 0, 0, 8, 0, 0], [0, 0, 0, 0, 0, 4, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [0, 0, -1, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 2], [0, 0, 0, 0, 0, 0, 3, 0], [0, 0, 1, 0, 0, 0, 10, 0], [0, -20, 0, 0, 0, 0, 0, 0]]
+    otc_A = [[1, 0, 1, 0, 0, 8, 0, 0], [0, 0, 0, 0, 0, 4, -4, 0], [1, 0, 0, 0, 0, 0, 0, 0], [0, 0, -1, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 3, 0], [0, 0, 1, 0, 0, 0, 10, 0], [0, -20, 0, 0, 0, 0, 0, 0]]
     otc_B = [[-1, 0, 1, 0, 0, 8, 0, 0], [0, 0, 0, 0, 0, 4, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [0, 0, -1, 0, 0, 0, 0, 0],
-              [100, 1, 0, 0, 0, 0, 0, 2], [0, 0, 0, 0, 0, 0, 3, 0], [0, 0, 1, 0, 0, 0, 10, 0], [0, -20, 0, 0, 0, 0, 0, 0]]
+              [100, 0, 0, 0, 0, 0, 0, 2], [0, -4, 0, 0, 0, 0, 3, 0], [0, 4, 1, 0, 0, 0, 10, 0], [0, 0, 0, 0, 0, 0, 0, 0]]
     mr = MRComposition([MR8(), MR2(), MR1(), MR4(), MR5(), MR3(), MR6(), MR7(),MR9()])
     #mr =MRComposition([MR9()])
     otc_output = spm.MatMul(otc_A,otc_B)
